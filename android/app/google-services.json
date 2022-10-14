@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "426115290812",
+    "project_id": "ttgroupchatapp",
+    "storage_bucket": "ttgroupchatapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426115290812:android:40fc7bc0ef5e5e67f222b9",
+        "android_client_info": {
+          "package_name": "com.meraj.tt_group_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426115290812-7lov01af2cf8j2q794tv9pjsgcrv4m4m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.meraj.tt_group_chat",
+            "certificate_hash": "d115c4843cd4955877413f00741cb54c14e786e0"
+          }
+        },
+        {
+          "client_id": "426115290812-ji8kg2f0jhvk8hhrbe3gdsl82p9geig7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu6VjbOyjMP1PZwBMgedtdHaa4Q1jB7wQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426115290812-ji8kg2f0jhvk8hhrbe3gdsl82p9geig7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
