@@ -45,7 +45,10 @@ class _MyAppState extends State<MyApp> {
   getUserLoggedInStatus() async {
     await HelperFunction.getUserLoggedInStatus().then((value) {
       if (value != null) {
-       _isSignedIn = value;
+       setState(() {
+         _isSignedIn = value;
+       
+       });
       }
     });
   }
@@ -54,7 +57,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: _isSignedIn ? HomePage() : LoginPage(),
+      home: _isSignedIn ? const HomePage() : const LoginPage(),
     );
   }
 }

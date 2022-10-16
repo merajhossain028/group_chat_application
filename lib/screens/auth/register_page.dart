@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tt_group_chat/screens/auth/login_page.dart';
+import 'package:tt_group_chat/screens/home_page.dart';
 import 'package:tt_group_chat/service/auth_service.dart';
 
+import '../../helper/helper_function.dart';
 import '../../widgets/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -70,7 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             textInputAction: TextInputAction.next,
                             decoration: textInputDecoration.copyWith(
                                 labelText: 'Full Name',
-                                
                                 prefixIcon: const Icon(
                                   Icons.person,
                                   color: Colors.blue,
@@ -180,12 +181,16 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       await authService
           .registerUserWithEmailandPassword(fullName, email, password)
-          .then((value) {
+          .then((value) async {
         if (value == true) {
           //saving the shared preference state
+          await HelperFunction.saveUserLoggedInStatus(true);
+          await HelperFunction.saveUserNameSF(fullName);
+          await HelperFunction.saveUserEmailSF(email);
+          nextScreenReplace(context, const HomePage());
 
         } else {
-          showSnackbar(context, value, Colors.red);
+          showSnackbar(context, Colors.red, value);
           setState(() {
             _isLoading = false;
           });
