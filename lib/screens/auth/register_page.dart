@@ -42,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Text(
-                            'Tecognize Training Group Chat',
+                            'TT Chat',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 30,

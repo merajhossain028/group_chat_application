@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Text(
-                            'Tecognize Training Group Chat',
+                            'TT Chat',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 30,
