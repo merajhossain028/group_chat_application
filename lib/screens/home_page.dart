@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               onTap: () {
-                nextScreenReplace(context, const ProfilePage());
+                nextScreenReplace(context, ProfilePage(userName: userName, email: email,));
               },
               leading: const Icon(Icons.person),
               title: const Text('Profile'),

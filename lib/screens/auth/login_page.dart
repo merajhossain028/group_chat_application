@@ -70,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 20,
                           ),
                           TextFormField(
+                            textInputAction: TextInputAction.next,
                             decoration: textInputDecoration.copyWith(
                                 labelText: 'Email',
                                 prefixIcon: const Icon(
@@ -93,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 15,
                           ),
                           TextFormField(
+                            textInputAction: TextInputAction.done,
                             obscureText: true,
                             decoration: textInputDecoration.copyWith(
                                 labelText: 'Password',
