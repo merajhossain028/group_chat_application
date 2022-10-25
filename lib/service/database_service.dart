@@ -29,4 +29,31 @@ class DatabaseService {
   getUserGroups() async{
     return userCollection.doc(uid).snapshots();
   }
+
+  //Creating Group
+  Future createGroup(String userName, String id, String groupName) async{
+    DocumentReference documentReference = await groupCollection.add({
+      'groupName': groupName,
+      'groupIcon': '',
+      'admin': '${id}_$userName',
+      'members': [],
+      'groupId': '',
+      'recentMessage': '',
+      'recentMessageSender': '',
+    });
+    
+    //update the members
+    await documentReference.update({
+      'members': FieldValue.arrayUnion(['${uid}_$userName']),
+      'groupId': documentReference.id,
+    });
+
+    DocumentReference userDocumentReference = userCollection.doc(uid);
+    return await userDocumentReference.update({
+      
+      'groups': FieldValue.arrayUnion([documentReference.id]),
+      //'groups': FieldValue.arrayUnion(['${groupDocumentReference.id}_$groupName']),
+    
+    });
+  }
 }

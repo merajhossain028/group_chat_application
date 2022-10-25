@@ -6,6 +6,7 @@ import 'package:tt_group_chat/screens/profile_page.dart';
 import 'package:tt_group_chat/screens/search_page.dart';
 import 'package:tt_group_chat/service/auth_service.dart';
 import 'package:tt_group_chat/service/database_service.dart';
+import 'package:tt_group_chat/widgets/group_tile.dart';
 import 'package:tt_group_chat/widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,12 +21,30 @@ class _HomePageState extends State<HomePage> {
   String email = '';
   AuthService authService = AuthService();
   Stream? groups;
+  bool _isLoading = false;
+  String groupName = '';
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gettingUserData();
+  }
+
+  //String Manipulation
+  String getId(String res) {
+    String id = '';
+    for (int i = 0; i < res.length; i++) {
+      if (res[i] == '@') {
+        break;
+      } else {
+        id += res[i];
+      }
+    }
+    return id;
+  }
+
+  String getName(String res) {
+    return res.substring(res.indexOf('_') + 1);
   }
 
   gettingUserData() async {
@@ -139,7 +158,96 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  popUpDialog(BuildContext context) {}
+  popUpDialog(BuildContext context) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: const Text(
+                'Create a group',
+                textAlign: TextAlign.left,
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _isLoading == true
+                      ? const Center(child: CircularProgressIndicator())
+                      : TextFormField(
+                          onChanged: ((value) {
+                            setState(() {
+                              groupName = value;
+                            });
+                          }),
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.blue,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.blue,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                ],
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (groupName != '') {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await DatabaseService(
+                              uid: FirebaseAuth.instance.currentUser!.uid)
+                          .createGroup(userName,
+                              FirebaseAuth.instance.currentUser!.uid, groupName)
+                          .whenComplete(() => _isLoading = false);
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                      // ignore: use_build_context_synchronously
+                      showSnackbar(
+                          context, Colors.green, 'Group Created Successfully!');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text('Create'),
+                ),
+              ],
+            );
+          });
+        });
+  }
+
   groupList() {
     return StreamBuilder(
         stream: groups,
@@ -148,7 +256,16 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.hasData) {
             if (snapshot.data['groups'] != null) {
               if (snapshot.data['groups'].length != 0) {
-                return const Text("Hello");
+                return ListView.builder(
+                    itemCount: snapshot.data['groups'].length,
+                    itemBuilder: ((context, index) {
+                      int reverseIndex = snapshot.data['groups'].length - index - 1;
+                      return GroupTile(
+                        groupId: getId(snapshot.data['groups'][index]),
+                        groupName: (snapshot.data['groups'][index]),
+                        userName: snapshot.data['fullName'],
+                      );
+                    }));
               } else {
                 return noGroupWidget();
               }
@@ -171,10 +288,11 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () {
-              popUpDialog(context);
-            },
-            child: const Icon(Icons.add_circle, size: 100, color: Colors.grey)),
+              onTap: () {
+                popUpDialog(context);
+              },
+              child:
+                  const Icon(Icons.add_circle, size: 100, color: Colors.grey)),
           const SizedBox(
             height: 20,
           ),
