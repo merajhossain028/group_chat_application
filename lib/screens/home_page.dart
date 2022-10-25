@@ -248,36 +248,38 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  groupList() {
+   groupList() {
     return StreamBuilder(
-        stream: groups,
-        builder: (context, AsyncSnapshot snapshot) {
-          //make some checks
-          if (snapshot.hasData) {
-            if (snapshot.data['groups'] != null) {
-              if (snapshot.data['groups'].length != 0) {
-                return ListView.builder(
-                    itemCount: snapshot.data['groups'].length,
-                    itemBuilder: ((context, index) {
-                      int reverseIndex = snapshot.data['groups'].length - index - 1;
-                      return GroupTile(
-                        groupId: getId(snapshot.data['groups'][index]),
-                        groupName: (snapshot.data['groups'][index]),
-                        userName: snapshot.data['fullName'],
-                      );
-                    }));
-              } else {
-                return noGroupWidget();
-              }
+      stream: groups,
+      builder: (context, AsyncSnapshot snapshot) {
+        // make some checks
+        if (snapshot.hasData) {
+          if (snapshot.data['groups'] != null) {
+            if (snapshot.data['groups'].length != 0) {
+              return ListView.builder(
+                itemCount: snapshot.data['groups'].length,
+                itemBuilder: (context, index) {
+                  int reverseIndex = snapshot.data['groups'].length - index - 1;
+                  return GroupTile(
+                      groupId: getId(snapshot.data['groups'][reverseIndex]),
+                      groupName: getName(snapshot.data['groups'][reverseIndex]),
+                      userName: snapshot.data['fullName']);
+                },
+              );
             } else {
               return noGroupWidget();
             }
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return noGroupWidget();
           }
-        });
+        } else {
+          return Center(
+            child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor),
+          );
+        }
+      },
+    );
   }
 
   noGroupWidget() {
