@@ -73,4 +73,9 @@ class DatabaseService {
     return groupCollection.doc(groupId).snapshots();
   }
 
+  // Searcj
+  searchByName(String groupName){
+    return groupCollection.where('groupName', isEqualTo: groupName).get();
+  }
+
 }
