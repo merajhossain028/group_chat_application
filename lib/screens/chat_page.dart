@@ -40,6 +40,7 @@ class _ChatPageState extends State<ChatPage> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,8 +54,8 @@ class _ChatPageState extends State<ChatPage> {
               nextScreen(
                   context,
                   GroupInfo(
-                      groupId: widget.groupId,
                       groupName: widget.groupName,
+                      groupId: widget.groupId,
                       adminName: admin));
             },
             icon: const Icon(Icons.info),

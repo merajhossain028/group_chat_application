@@ -54,9 +54,9 @@ class _HomePageState extends State<HomePage> {
       });
     });
 
-    await HelperFunction.getUserNameFromStatus().then((value) {
+    await HelperFunction.getUserNameFromStatus().then((val) {
       setState(() {
-        userName = value!;
+        userName = val!;
       });
     });
 

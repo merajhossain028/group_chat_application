@@ -17,21 +17,37 @@ class _SearchPageState extends State<SearchPage> {
   QuerySnapshot? searchSnapshot;
   bool hasUserSearched = false;
   String userName = '';
+  bool isJoined = false;
   User? user;
-  
 
   @override
   void initState() {
     super.initState();
     getCurrentUserIdandName();
   }
+
   getCurrentUserIdandName() async {
     await HelperFunction.getUserNameFromStatus().then((value) {
       setState(() {
         userName = value!;
       });
     });
-  user = FirebaseAuth.instance.currentUser;
+    user = FirebaseAuth.instance.currentUser;
+  }
+   String getName(String r) {
+    return r.substring(r.indexOf('_') + 1);
+  }
+
+  String getId(String res) {
+    String id = '';
+    for (int i = 0; i < res.length; i++) {
+      if (res[i] == '@') {
+        break;
+      } else {
+        id += res[i];
+      }
+    }
+    return id;
   }
 
   @override
@@ -122,8 +138,72 @@ class _SearchPageState extends State<SearchPage> {
         : Container();
   }
 
+  joinedOrNot(
+      String userName, String groupId, String groupName, String admin) async {
+    await DatabaseService(uid: user!.uid)
+        .isUsertoJson(groupName, groupId, userName)
+        .then((value) {
+      setState(() {
+        isJoined = value;
+      });
+    });
+  }
+
   Widget groupTile(
       String userName, String groupId, String groupName, String admin) {
-    return Text("Hi");
+    //function to check if the user is already in the group
+    joinedOrNot(userName, groupId, groupName, admin);
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundColor: Theme.of(context).primaryColor,
+        child: Text(
+          groupName.substring(0, 1).toUpperCase(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+      ),
+      title: Text(
+        groupName,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
+      subtitle: Text(
+        'Admin: ${getName(admin)}',
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      trailing: InkWell(
+        onTap:() async {
+          
+        },
+        child: isJoined ? Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.black,
+            border: Border.all(
+              color: Colors.white,
+              width: 1,
+            ),
+
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: const Text('Joined', style: TextStyle(color: Colors.white),),
+        ): Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color:Theme.of(context).primaryColor,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: const Text('Join', style: TextStyle(color: Colors.white),),
+        ),
+      ),
+    );
   }
 }

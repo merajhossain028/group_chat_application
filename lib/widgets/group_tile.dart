@@ -22,11 +22,13 @@ class _GroupTileState extends State<GroupTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        nextScreen(context,  ChatPage(
-          groupId: widget.groupId,
-          groupName: widget.groupName,
-          userName: widget.userName,
-        ));
+        nextScreen(
+            context,
+            ChatPage(
+              groupId: widget.groupId,
+              groupName: widget.groupName,
+              userName: widget.userName,
+            ));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -49,6 +51,10 @@ class _GroupTileState extends State<GroupTile> {
               color: Colors.black,
               fontWeight: FontWeight.w600,
             ),
+          ),
+          subtitle: Text(
+            'Join the conversation as ${widget.userName}',
+            style: const TextStyle(fontSize: 13),
           ),
         ),
       ),

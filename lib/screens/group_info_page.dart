@@ -34,7 +34,7 @@ class _GroupInfoState extends State<GroupInfo> {
     });
   }
 
-  getName(String r) {
+ String getName(String r) {
     return r.substring(r.indexOf('_') + 1);
   }
 
